@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f7f4" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>a letter</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M9 8c4-4 12-3 15 1s3 11-1 14-12 3-15-1-3-10 1-14z' fill=%27%23ff5a36%27/%3E%3Ccircle cx='16' cy='16' r='2.5' fill=%27%231e2226%27/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Inter:wght@400;500&family=Caveat:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- 1. Landing -->
+  <header class="hero" id="top">
+    <div class="holds" id="holds" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="kicker reveal" data-text="hero.kicker"></p>
+      <h1 class="hero-title reveal" style="--d: 150ms" data-text="hero.title"></h1>
+      <p class="hero-sub reveal" style="--d: 300ms" data-text="hero.subtitle"></p>
+    </div>
+    <a class="scroll-cue reveal" style="--d: 600ms" href="#week">
+      <span data-text="hero.scrollHint"></span>
+      <i aria-hidden="true"></i>
+    </a>
+  </header>
+
+  <main>
+    <!-- 2. Photos, one per screen -->
+    <section class="week" id="week">
+      <div class="section-head">
+        <h2 class="reveal" data-text="week.heading"></h2>
+        <p class="reveal" style="--d: 120ms" data-text="week.subheading"></p>
+      </div>
+      <div id="slides"></div>
+    </section>
+
+    <!-- 3. The letter -->
+    <section class="letter" id="letter">
+      <p class="letter-intro" data-text="letter.intro"></p>
+      <article class="sheet">
+        <dl class="route-card" id="routeCard"></dl>
+        <h2 class="greeting" data-text="letter.greeting"></h2>
+        <div class="sheet-body" id="paragraphs"></div>
+        <div class="signoff">
+          <p data-text="letter.signoff"></p>
+          <p class="signature" data-text="from"></p>
+        </div>
+        <p class="ps" data-text="letter.ps"></p>
+      </article>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+/* Designed mobile-first for iPhone 14 Plus (428 × 926 CSS px), scales up fine on larger screens. */
+
+:root {
+  /* the wall */
+  --paper: #f7f7f4;       /* freshly painted gym wall */
+  --paper-2: #ebebe6;
+  --card: #ffffff;
+  --ink: #1e2226;
+  --ink-soft: #5d646b;
+  --line: rgba(30, 34, 38, 0.16);
+
+  /* hold colours, like the circuits at a climbing gym */
+  --red: #ff4b3e;
+  --orange: #ff9a1f;
+  --yellow: #ffd000;
+  --green: #1fc36b;
+  --blue: #2f80ff;
+  --purple: #9b5cf7;
+  --pink: #ff5cad;
+  --teal: #12c2c2;
+
+  --accent: #ff5a36;      /* main highlight */
+  --accent-ink: #e0401f;  /* same colour, dark enough for text */
+
+  /* per-photo colour (set by script.js for each day) */
+  --c: var(--accent);
+  --c-ink: var(--accent-ink);
+
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hand: "Caveat", "Bradley Hand", cursive;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html {
+  scroll-behavior: smooth;
+  background: #f7f7f4;              /* same as the page, so iOS overscroll bounce matches */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  /* the grid of bolt holes (t-nuts) you see on every climbing wall */
+  background-image: radial-gradient(circle, rgba(30, 34, 38, 0.16) 1.4px, transparent 2px);
+  background-size: 34px 34px;
+  background-position: 50% 0;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-weight: 350;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+img { display: block; max-width: 100%; }
+
+::selection { background: rgba(255, 90, 54, 0.22); }
+
+
+
+/* Soft chalk / paper grain */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  transform: translateZ(0);          /* own layer, so it never repaints while scrolling */
+  opacity: 0.22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5  0 0 0 0 .45  0 0 0 0 .4  0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Small uppercase label style */
+.kicker,
+.slide-day,
+.slide-count,
+.scroll-cue span,
+.letter-intro,
+.section-head p {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* ---------- Reveal on scroll (landing + photos only) ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 1s var(--ease), transform 1s var(--ease);
+  transition-delay: var(--d, 0ms);
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+
+/* ==========================================================================
+   1. Landing
+   ========================================================================== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: calc(72px + var(--safe-t)) 24px calc(120px + var(--safe-b));
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-inner { position: relative; z-index: 2; max-width: 760px; }
+
+.kicker { color: var(--accent-ink); margin: 0 0 24px; }
+
+.hero-title {
+  margin: 0;
+  font-size: clamp(3.6rem, 17vw, 8.5rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.hero-sub {
+  margin: 28px auto 0;
+  max-width: 26ch;
+  font-size: clamp(1.1rem, 4.4vw, 1.3rem);
+  color: var(--ink-soft);
+}
+
+.scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(28px + var(--safe-b));
+  translate: -50% 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.scroll-cue i {
+  display: block;
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(var(--ink-soft), transparent);
+  transform-origin: top;
+  animation: cue 2.4s var(--ease) infinite;
+}
+@keyframes cue {
+  0%   { transform: scaleY(0); opacity: 1; }
+  60%  { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+
+/* Floating outlined holds */
+.holds { position: absolute; inset: 0; z-index: 1; }
+.hero.paused .hold, .hero.paused .hold svg, .hero.paused .scroll-cue i { animation-play-state: paused; }
+.hold {
+  position: absolute;
+  width: var(--s);
+  opacity: 0;
+  animation: holdIn 1.6s var(--ease) forwards;
+  animation-delay: var(--delay);
+  will-change: transform;
+}
+.hold svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  animation: drift var(--dur, 14s) ease-in-out infinite alternate;
+}
+/* solid, colourful holds: shadow + body + chalk + bolt */
+.hold .sh,    .circuit .sh    { fill: rgba(20, 24, 28, 0.16); }
+.hold .body,  .circuit .body  { fill: var(--hc); }
+.hold .shine, .circuit .shine { fill: rgba(255, 255, 255, 0.28); }
+.hold .chalk { fill: rgba(255, 255, 255, 0.55); }
+.hold .bolt,  .circuit .bolt  { fill: #1e2226; stroke: rgba(255, 255, 255, 0.55); stroke-width: 1; }
+
+/* small row of holds above the photos, one per day in that day's colour */
+.circuit { display: flex; justify-content: center; gap: 10px; margin: 0 0 22px; }
+.circuit svg { width: 32px; display: block; overflow: visible; }
+
+@keyframes holdIn { to { opacity: 1; } }
+@keyframes drift {
+  from { transform: translate(0, 0) rotate(0deg); }
+  to   { transform: translate(6px, -10px) rotate(6deg); }
+}
+
+/* ==========================================================================
+   2. Photos, one per screen. Each day can use a different layout:
+      tag · full · arch · editorial · hold · topo   (set "style" in config.js)
+   ========================================================================== */
+.week {
+  background: none;                 /* the wall (with its bolt grid) shows through */
+}
+
+.section-head {
+  text-align: center;
+  padding: 96px 24px 8px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.section-head h2 {
+  margin: 0;
+  font-size: clamp(2.3rem, 10vw, 3.6rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.1;
+}
+.section-head p { margin: 16px auto 0; max-width: 28ch; color: var(--ink-soft); line-height: 1.8; }
+
+.slide {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 56px 20px calc(56px + var(--safe-b));
+}
+
+/* shared photo frame + placeholder */
+.frame { position: relative; overflow: hidden; background: var(--paper); }
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+.frame img.loaded { opacity: 1; }
+.frame.empty {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  color: var(--ink-soft);
+}
+.frame.empty svg { width: 44px; opacity: 0.5; }
+.frame.empty svg path { fill: none; stroke: currentColor; stroke-width: 1.4; }
+.frame.empty span { font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; }
+
+.slide-day { margin: 0; color: var(--c-ink); }
+.slide-count { margin: 0; color: var(--ink-soft); letter-spacing: 0.14em; }
+.caption { margin: 0; font-style: italic; line-height: 1.45; }
+
+/* ---------- tag: taped route tag ---------- */
+.s-tag .tag { width: min(86vw, 400px); margin: 0; }
+.s-tag .tag-inner {
+  position: relative;
+  background: var(--card);
+  padding: 12px 12px 18px;
+  box-shadow: 0 1px 2px rgba(43, 39, 36, 0.06), 0 18px 40px -14px rgba(43, 39, 36, 0.24);
+  transform: rotate(-1.4deg);
+}
+.s-tag .tag-inner::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 92px;
+  height: 25px;
+  translate: -50% 0;
+  rotate: -3deg;
+  background: var(--tape, rgba(214, 199, 172, 0.66));
+}
+.s-tag .frame { aspect-ratio: 4 / 5; background: var(--paper-2); }
+.s-tag .frame.empty { border: 1.5px dashed var(--line); background: transparent; }
+.s-tag .meta { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 16px 4px 0; }
+.s-tag .caption { margin: 8px 4px 0; font-size: 1.12rem; }
+
+/* ---------- panel: photo bolted to the wall in a thick coloured frame ---------- */
+.s-panel .wrap { display: grid; justify-items: center; text-align: center; gap: 26px; width: 100%; }
+.s-panel .panel {
+  position: relative;
+  width: min(86vw, 400px);
+  padding: 22px;
+  background: var(--card);
+  border: 7px solid var(--c);
+  border-radius: 10px;
+  box-shadow: 0 2px 0 rgba(30, 34, 38, 0.06), 0 22px 40px -18px rgba(30, 34, 38, 0.3);
+}
+.s-panel .frame { aspect-ratio: 4 / 5; border-radius: 3px; background: var(--paper-2); }
+.s-panel .frame.empty { border: 1.5px dashed var(--line); background: transparent; }
+.s-panel .screw {             /* a bolt in each corner of the mat */
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #8a9096 0 25%, #2a2f34 60%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+.s-panel .screw:nth-of-type(1) { top: 6px;    left: 6px; }
+.s-panel .screw:nth-of-type(2) { top: 6px;    right: 6px; }
+.s-panel .screw:nth-of-type(3) { bottom: 6px; left: 6px; }
+.s-panel .screw:nth-of-type(4) { bottom: 6px; right: 6px; }
+.s-panel .text { max-width: 400px; }
+.s-panel .text::before {      /* coloured tape strip, like a gym route tag */
+  content: "";
+  display: block;
+  width: 64px;
+  height: 8px;
+  margin: 0 auto 14px;
+  background: var(--c);
+  rotate: -2deg;
+}
+.s-panel .slide-count { margin-bottom: 8px; }
+.s-panel .caption { margin: 10px auto 0; font-size: clamp(1.5rem, 6.4vw, 2rem); font-weight: 300; max-width: 18ch; line-height: 1.25; }
+
+/* ---------- arch: framed like a window, centered ---------- */
+.s-arch .wrap { display: grid; justify-items: center; text-align: center; gap: 22px; }
+.s-arch .arch {
+  width: min(76vw, 360px);
+  padding: 10px;
+  border: 2.5px solid var(--c);
+  border-radius: 999px 999px 8px 8px;
+}
+.s-arch .frame { aspect-ratio: 3 / 4; border-radius: 999px 999px 4px 4px; background: var(--paper); }
+.s-arch .frame.empty { border: 1.5px dashed var(--line); }
+/* two arches side by side, the second set a little lower */
+.s-arch .pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+  width: min(92vw, 440px);
+}
+.s-arch .pair .arch { width: auto; padding: 7px; }
+.s-arch .pair .arch:nth-child(2) { margin-top: 40px; }
+.s-arch .pair .frame.empty span { font-size: 0.62rem; text-align: center; padding: 0 10px; }
+.s-arch .caption { font-size: clamp(1.5rem, 6.4vw, 2rem); font-weight: 300; max-width: 18ch; }
+
+/* ---------- editorial: magazine spread ---------- */
+.s-editorial .wrap {
+  width: min(100%, 440px);
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  column-gap: 14px;
+}
+.s-editorial .side {
+  margin: 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  align-self: end;
+  font-size: 3.1rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1;
+  color: var(--c-ink);
+}
+.s-editorial .num {
+  margin: 0 0 6px;
+  font-size: 4.4rem;
+  font-weight: 300;
+  line-height: 0.9;
+  color: var(--c);
+  opacity: 0.55;
+  text-align: right;
+}
+.s-editorial .frame { aspect-ratio: 3 / 4; background: var(--paper); }
+.s-editorial .frame.empty { border: 1.5px dashed var(--line); }
+.s-editorial .text { grid-column: 2; margin-top: 18px; padding-top: 14px; border-top: 4px solid var(--c); }
+.s-editorial .caption { font-size: 1.2rem; }
+
+/* ---------- hold: photo shaped like a climbing hold ---------- */
+.s-hold .wrap { display: grid; justify-items: center; text-align: center; gap: 22px; width: 100%; }
+.s-hold .shape { width: min(92vw, 420px); filter: drop-shadow(0 18px 24px rgba(43, 39, 36, 0.22)); position: relative; transform: translateZ(0); }
+.s-hold .frame,
+.s-hold .shape::before {
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 90' preserveAspectRatio='none'%3E%3Cpath d='M9 40C12 15 38 2 63 6s36 22 32 46-28 37-55 34S6 64 9 40z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 90' preserveAspectRatio='none'%3E%3Cpath d='M9 40C12 15 38 2 63 6s36 22 32 46-28 37-55 34S6 64 9 40z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.s-hold .frame { aspect-ratio: 100 / 90; background: var(--c); }
+.s-hold .shape::before {      /* a bright hold behind the photo, peeking out as a thick rim */
+  content: "";
+  position: absolute;
+  inset: -16px -14px -14px -16px;
+  background: var(--c);
+}
+.s-hold .frame.empty { background: var(--c); color: #fff; }
+.s-hold .bolt {               /* the screw hole every hold has */
+  position: absolute;
+  left: 54%;
+  top: 46%;
+  width: 18px;
+  height: 18px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #5a504a 0 35%, #2b2724 36% 55%, rgba(245, 240, 232, 0.85) 57%);
+  box-shadow: 0 0 0 2px rgba(245, 240, 232, 0.5);
+}
+.s-hold .shape.no-photo .bolt { display: none; }
+.s-hold .shape.no-photo::before { display: none; }
+
+/* coloured tape on the route-tag card, like the tape under every gym problem */
+.s-tag .tag-inner::before { --tape: var(--c); opacity: 0.92; }
+.s-hold .meta { display: flex; gap: 14px; align-items: baseline; }
+.s-hold .caption { font-size: clamp(1.4rem, 6vw, 1.8rem); font-weight: 300; max-width: 20ch; }
+
+/* ---------- topo: page from a climbing guidebook ---------- */
+.s-topo .topo {
+  width: min(88vw, 400px);
+  background: var(--card);
+  padding: 16px 16px 20px;
+  border: 1px solid rgba(43, 39, 36, 0.12);
+  box-shadow: 0 18px 40px -20px rgba(43, 39, 36, 0.25);
+}
+.s-topo .topo-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 4px solid var(--c);
+}
+.s-topo .stars { color: var(--c-ink); letter-spacing: 0.2em; font-size: 0.9rem; }
+.s-topo .frame { aspect-ratio: 4 / 5; background: var(--paper-2); }
+.s-topo .frame.empty { border: 1.5px dashed var(--line); background: transparent; }
+.s-topo .line {               /* dashed route drawn over the photo */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.s-topo .line path { fill: none; stroke: #fff; stroke-width: 2; stroke-dasharray: 5 6; opacity: 0.9; vector-effect: non-scaling-stroke; }
+.s-topo .line circle { fill: var(--c); stroke: #fff; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.s-topo .frame.empty + .line { display: none; }
+.s-topo .entry { margin: 14px 0 0; font-size: 1.05rem; }
+.s-topo .entry b { font-weight: 500; font-style: normal; }
+.s-topo .caption { margin-top: 4px; font-size: 1.05rem; color: var(--ink); }
+.s-topo .credit {
+  margin: 10px 0 0;
+  font-family: var(--sans);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ---------- captions: same style on every day (small serif italic, easy to read) ---------- */
+.slide .caption {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 350;
+  font-size: 1.12rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.s-panel .caption, .s-arch .caption, .s-hold .caption { max-width: 26ch; }
+
+/* ==========================================================================
+   3. Letter (static paper, no animation)
+   ========================================================================== */
+.letter {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 96px 16px calc(96px + var(--safe-b));
+}
+
+.letter-intro { margin: 0 0 32px; text-align: center; color: var(--ink-soft); }
+
+.sheet {
+  position: relative;
+  padding: 44px 24px 40px;
+  background-color: var(--card);
+  background-image:   /* faint chalky fingerprints */
+    radial-gradient(ellipse 54px 34px at 92% 96%, rgba(120, 128, 136, 0.12), transparent 70%),
+    radial-gradient(ellipse 30px 20px at 84% 92%, rgba(120, 128, 136, 0.09), transparent 70%),
+    radial-gradient(ellipse 38px 24px at 6% 3%, rgba(120, 128, 136, 0.08), transparent 70%);
+  box-shadow: 0 1px 2px rgba(43, 39, 36, 0.05), 0 30px 60px -30px rgba(43, 39, 36, 0.3);
+}
+.sheet::before {          /* tape */
+  content: "";
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 110px;
+  height: 26px;
+  translate: -50% 0;
+  rotate: 2deg;
+  background: var(--accent);
+  opacity: 0.92;
+}
+
+/* route tag header, like the tags on gym problems */
+.route-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 14px;
+  margin: 0 0 40px;
+  padding: 14px 0;
+  border-top: 4px solid var(--accent);
+  border-bottom: 1px solid var(--line);
+}
+.route-card:empty { display: none; }
+.route-card div { padding: 2px 0 2px 14px; border-left: 1px solid var(--line); }
+.route-card div:nth-child(odd) { border-left: 0; padding-left: 0; }
+.route-card dt {
+  font-family: var(--sans);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.route-card dd { margin: 4px 0 0; font-style: italic; font-size: 1rem; }
+
+.greeting {
+  margin: 0 0 32px;
+  font-size: 1.9rem;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.pitch-text {
+  margin: 0 0 1.2em;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+.pitch-text:last-child { margin-bottom: 0; }
+
+.signoff { margin-top: 52px; text-align: right; }
+.signoff p { margin: 0; font-size: 1.1rem; font-style: italic; color: var(--ink-soft); }
+.signoff .signature {
+  margin-top: 2px;
+  font-family: var(--hand);
+  font-style: normal;
+  font-size: 2.8rem;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.ps {
+  margin: 40px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-style: italic;
+  font-size: 1.02rem;
+  color: var(--ink-soft);
+  white-space: pre-line;
+}
+
+/* ---------- Larger screens ---------- */
+@media (min-width: 720px) {
+  .sheet { padding: 64px 72px 60px; }
+  .route-card { grid-template-columns: repeat(4, 1fr); }
+  .route-card div:nth-child(odd) { border-left: 1px solid var(--line); padding-left: 14px; }
+  .route-card div:first-child { border-left: 0; padding-left: 0; }
+  .greeting { font-size: 2.3rem; }
+  .pitch-text { font-size: 1.22rem; }
+}
+
+/* ---------- Respect reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal, .hold { opacity: 1; transform: none; }
+}
