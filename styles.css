@@ -1,4 +1,4 @@
-/* Designed mobile-first for iPhone 14 Plus (428 × 926 CSS px), scales up fine on larger screens. */
+/* Designed mobile-first for iPhone 13 Pro Max / 14 Plus (428 × 926 CSS px), scales up fine on larger screens. */
 
 :root {
   /* the wall */
@@ -256,6 +256,19 @@ img { display: block; max-width: 100%; }
 .slide-count { margin: 0; color: var(--ink-soft); letter-spacing: 0.14em; }
 .caption { margin: 0; font-style: italic; line-height: 1.45; }
 
+/* small date under the day name */
+.slide-date {
+  margin: 4px 0 0;
+  font-family: var(--sans);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.s-editorial .slide-date { margin: 0 0 8px; }
+.s-topo .slide-date { margin: 2px 0 6px; }
+
 /* ---------- tag: taped route tag ---------- */
 .s-tag .tag { width: min(86vw, 400px); margin: 0; }
 .s-tag .tag-inner {
@@ -376,7 +389,7 @@ img { display: block; max-width: 100%; }
 
 /* ---------- hold: photo shaped like a climbing hold ---------- */
 .s-hold .wrap { display: grid; justify-items: center; text-align: center; gap: 22px; width: 100%; }
-.s-hold .shape { width: min(92vw, 420px); filter: drop-shadow(0 18px 24px rgba(43, 39, 36, 0.22)); position: relative; transform: translateZ(0); }
+.s-hold .shape { width: min(84vw, 400px); filter: drop-shadow(0 18px 24px rgba(43, 39, 36, 0.22)); position: relative; transform: translateZ(0); }
 .s-hold .frame,
 .s-hold .shape::before {
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 90' preserveAspectRatio='none'%3E%3Cpath d='M9 40C12 15 38 2 63 6s36 22 32 46-28 37-55 34S6 64 9 40z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
@@ -427,17 +440,9 @@ img { display: block; max-width: 100%; }
 }
 .s-topo .stars { color: var(--c-ink); letter-spacing: 0.2em; font-size: 0.9rem; }
 .s-topo .frame { aspect-ratio: 4 / 5; background: var(--paper-2); }
+.s-topo .topo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }   /* two photos side by side */
+.s-topo .topo-pair .frame.empty span { font-size: 0.6rem; text-align: center; padding: 0 8px; }
 .s-topo .frame.empty { border: 1.5px dashed var(--line); background: transparent; }
-.s-topo .line {               /* dashed route drawn over the photo */
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.s-topo .line path { fill: none; stroke: #fff; stroke-width: 2; stroke-dasharray: 5 6; opacity: 0.9; vector-effect: non-scaling-stroke; }
-.s-topo .line circle { fill: var(--c); stroke: #fff; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
-.s-topo .frame.empty + .line { display: none; }
 .s-topo .entry { margin: 14px 0 0; font-size: 1.05rem; }
 .s-topo .entry b { font-weight: 500; font-style: normal; }
 .s-topo .caption { margin-top: 4px; font-size: 1.05rem; color: var(--ink); }

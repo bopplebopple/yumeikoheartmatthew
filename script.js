@@ -99,10 +99,14 @@
     return parent;
   }
 
+  // small date under the day name, e.g. "09 Nov 2026" (set "date" on each day in config.js)
+  function dateEl(d) { return d.date ? el("p", "slide-date", fmt(d.date)) : null; }
+  function dayBlock(d) { return add(el("div", "day-block"), el("p", "slide-day", fmt(d.day)), dateEl(d)); }
+
   var layouts = {
     // taped route-tag card
     tag: function (s, d, i, n) {
-      var meta = add(el("div", "meta"), el("p", "slide-day", fmt(d.day)), el("p", "slide-count", pad(i + 1) + " / " + pad(n)));
+      var meta = add(el("div", "meta"), dayBlock(d), el("p", "slide-count", pad(i + 1) + " / " + pad(n)));
       var inner = add(el("div", "tag-inner"), photoFrame(d, i), meta, d.caption && el("p", "caption", fmt(d.caption)));
       add(s, reveal(add(el("figure", "tag"), inner)));
     },
@@ -113,7 +117,7 @@
         el("span", "screw"), el("span", "screw"), el("span", "screw"), el("span", "screw"));
       var text = add(el("div", "text"),
         el("p", "slide-count", pad(i + 1) + " / " + pad(n)),
-        el("p", "slide-day", fmt(d.day)),
+        dayBlock(d),
         d.caption && el("p", "caption", fmt(d.caption)));
       add(s, add(el("div", "wrap"), reveal(panel), reveal(text, 150)));
     },
@@ -125,7 +129,7 @@
       var arches = files.map(function (f) { return add(el("div", "arch"), photoFrame(d, i, null, f)); });
       var photos = arches.length > 1 ? add.apply(null, [el("div", "pair")].concat(arches)) : arches[0];
       add(s, add(el("div", "wrap"),
-        reveal(el("p", "slide-day", fmt(d.day))),
+        reveal(dayBlock(d)),
         reveal(photos, 120),
         d.caption && reveal(el("p", "caption", fmt(d.caption)), 240),
         reveal(el("p", "slide-count", pad(i + 1) + " / " + pad(n)), 320)));
@@ -134,7 +138,7 @@
     // magazine spread: day name down the side, big number, rule + caption
     editorial: function (s, d, i) {
       var main = add(el("div", "main"), el("p", "num", pad(i + 1)), photoFrame(d, i));
-      var text = add(el("div", "text"), d.caption && el("p", "caption", fmt(d.caption)));
+      var text = add(el("div", "text"), dateEl(d), d.caption && el("p", "caption", fmt(d.caption)));
       add(s, reveal(add(el("div", "wrap"), el("p", "side", fmt(d.day)), main, text)));
     },
 
@@ -143,22 +147,21 @@
       var shape = el("div", "shape");
       add(shape, photoFrame(d, i, function () { shape.classList.add("no-photo"); }), el("span", "bolt"));
       add(s, add(el("div", "wrap"),
-        reveal(add(el("div", "meta"), el("p", "slide-day", fmt(d.day)), el("p", "slide-count", pad(i + 1) + " / " + pad(n)))),
+        reveal(add(el("div", "meta"), dayBlock(d), el("p", "slide-count", pad(i + 1) + " / " + pad(n)))),
         reveal(shape, 120),
         d.caption && reveal(el("p", "caption", fmt(d.caption)), 240)));
     },
 
     // a page from a climbing guidebook, route line drawn over the photo
+    // (give it two files, e.g. file: ["sat", "sat2"], and they sit side by side)
     topo: function (s, d, i) {
-      var frame = photoFrame(d, i);
-      frame.insertAdjacentHTML("beforeend",
-        '<svg class="line" viewBox="0 0 100 125" aria-hidden="true">' +
-        '<path d="M20 119C25 100 14 86 22 70S31 44 22 30 27 13 31 6"/>' +
-        '<circle cx="20" cy="119" r="2.6"/><circle cx="31" cy="6" r="1.8"/></svg>');
+      var files = Array.isArray(d.file) ? d.file.slice(0, 2) : [d.file];
+      var frames = files.map(function (f) { return photoFrame(d, i, null, f); });
+      var frame = frames.length > 1 ? add.apply(null, [el("div", "topo-pair")].concat(frames)) : frames[0];
       var head = add(el("div", "topo-head"), el("p", "slide-count", "No. " + pad(i + 1)), topo.stars && el("span", "stars", fmt(topo.stars)));
       var entry = el("p", "entry");
       add(entry, el("b", null, (i + 1) + ". "), el("em", null, fmt(d.day)));
-      add(s, reveal(add(el("div", "topo"), head, frame, entry,
+      add(s, reveal(add(el("div", "topo"), head, frame, entry, dateEl(d),
         d.caption && el("p", "caption", fmt(d.caption)),
         topo.credit && el("p", "credit", fmt(topo.credit)))));
     }

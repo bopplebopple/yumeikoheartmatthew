@@ -1,8 +1,8 @@
 Put your photos in this folder with these exact names (lowercase):
 
-  mon.png   tue.png   wed.png   wed2.png   thur.png   fri.png   sat.png
+  mon.png   tue.png   wed.png   wed2.png   thur.png   fri.png   sat.png   sat2.png
 
-wed.png and wed2.png are shown side by side on Wednesday (wed on the left).
+wed + wed2 and sat + sat2 are shown side by side (the first one on the left).
 
 .jpg / .jpeg / .webp also work (e.g. mon.jpg).
 If a photo is missing, the site shows a neat "photo coming soon" card instead.

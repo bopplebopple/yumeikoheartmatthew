@@ -40,20 +40,21 @@ window.CONFIG = {
     //   "panel"      thick coloured frame with a bolt in each corner, like a wall panel
     //   "arch"       framed in an arched window, centered
     //                (give it two files, file: ["wed", "wed2"], for two arches side by side)
+    //   (the "topo" style can also take two files, e.g. file: ["sat", "sat2"])
     //   "editorial"  magazine layout, day name running down the side
     //   "hold"       photo cut into the shape of a climbing hold
-    //   "topo"       a page from a climbing guidebook, with a route drawn on
+    //   "topo"       a page from a climbing guidebook
     //
     // Each day also gets a hold colour, like gym circuits (Mon red, Tue orange, Wed yellow,
     // Thu green, Fri blue, Sat purple). To change one, add  color: "pink"  to that day.
     // Options: red, orange, yellow, green, blue, purple, pink, teal
     days: [
-      { file: "mon",  day: "Monday",    style: "tag",       caption: "Picking up my Princess from the airport SYNG BGNT" },
-      { file: "tue",  day: "Tuesday",   style: "panel",     caption: "SNOOPY COUPLE woi nnti klo we climb kebetulan same day pake lgi hehehe" },
-      { file: ["wed", "wed2"], day: "Wednesday", style: "arch",      caption: "GIRLFRIEND DAYYYY i hope u never regret saying yes I LOVE YOU SO MUCH" },
-      { file: "thur", day: "Thursday",  style: "editorial", caption: "A short caption for Thursday" },
-      { file: "fri",  day: "Friday",    style: "hold",      caption: "A short caption for Friday" },
-      { file: "sat",  day: "Saturday",  style: "topo",      caption: "A short caption for Saturday" }
+      { file: "mon",  day: "Monday",    date: "09 Nov 2026",    style: "tag",       caption: "Picking up my Princess from the airport SYNG BGNT" },
+      { file: "tue",  day: "Tuesday",   date: "10 Nov 2026",   style: "panel",     caption: "SNOOPY COUPLE woi nnti klo we climb kebetulan same day pake lgi hehehe" },
+      { file: ["wed", "wed2"], day: "Wednesday", date: "11 Nov 2026", style: "arch",      caption: "GIRLFRIEND DAYYYY i hope u never regret saying yes I LOVE YOU SO MUCH" },
+      { file: "thur", day: "Thursday",  date: "12 Nov 2026",  style: "editorial", caption: "our first n def not our last photobooth <3" },
+      { file: "fri",  day: "Friday",    date: "13 Nov 2026",    style: "hold",      caption: "HDL WITH MY BEBEEEEEEEEEEE" },
+      { file: ["sat", "sat2"], day: "Saturday",  date: "14 Nov 2026",  style: "topo",      caption: "THE BEST DATE OF MY LIFEEEE" }
     ],
 
     // Extra text used only by the "topo" (guidebook) style
@@ -85,16 +86,13 @@ window.CONFIG = {
     // Each line in quotes is one paragraph. Add or remove as many as you like
     // (keep a comma between them).
     paragraphs: [
-      "Write how it started here. The first time you noticed her, the first session together, whatever comes to mind first.",
-      "Something you've learned from her, or something she does that makes everything feel easier.",
-      "A harder moment you got through together, or the part of this that matters most to you.",
-      "Where you are now, and what you're looking forward to. Keep it simple and honest."
+      "Bebe I love you so much thank you for also choosing me, I hope u had as much fun as i did this week. Bebe safe flight ya im sorry i didnt get u any flowers all the peonies lama bgnt po ny and i really wanted the first flower u receive from me to be ur favorite flower :( I know im not perfect but i will try to be for u, u deserve the perfect boyfriend i hope i could be that for you. I dont wanna lose u bebe pls stay semangat in climbing and know i will always love you and will always try my best for you."
     ],
 
-    signoff: "Always,",     // shown above your name at the end of the letter
+    signoff: "Love,",     // shown above your name at the end of the letter
 
     // Optional P.S. at the very bottom. Set to "" to hide it.
-    ps: "P.S. A small thing you want her to read last."
+    ps: "P.S. SAFE FLIGHT MY GIRLFRIENDDDD."
   },
 
   // Photo file type. If a .png isn't found, the site also tries .jpg, .jpeg and .webp.
